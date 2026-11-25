@@ -1,0 +1,19 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+
+const places = [
+  { id: "arrival", name: "Arrival courtyard", x: 17, y: 71, description: "An arch, a shaded threshold and the first glimpse of water.", href: "/retreat", action: "The retreat" },
+  { id: "rooms", name: "The residences", x: 34, y: 34, description: "Three room types gathered around quieter planted courts.", href: "/stay", action: "Explore rooms" },
+  { id: "dining", name: "Dining pavilion", x: 62, y: 28, description: "A shared table turns toward the hills at dusk.", href: "/dining", action: "Discover dining" },
+  { id: "wellness", name: "Restorative space", x: 76, y: 67, description: "A sheltered place for unhurried rest and gentle rituals.", href: "/experiences", action: "Explore experiences" },
+  { id: "craft", name: "Craft courtyard", x: 46, y: 71, description: "Cloth, colour and the patient rhythm of making.", href: "/experiences#craft-session", action: "Cloth & colour" },
+  { id: "terrace", name: "Viewing terrace", x: 86, y: 37, description: "A simple ledge from which to watch the changing light.", href: "/retreat", action: "See the landscape" },
+] as const;
+
+export default function Atlas({ compact = false }: { compact?: boolean }) {
+  const [active, setActive] = useState(0);
+  const place = places[active];
+  return <div className={`atlas ${compact ? "atlas-compact" : ""}`}><div className="atlas-plan" aria-label="Conceptual schematic of the imagined Auriel property"><svg viewBox="0 0 1000 650" aria-hidden="true" focusable="false"><defs><pattern id="atlas-grain" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r="1" fill="#8c8069" opacity=".3" /></pattern></defs><rect width="1000" height="650" fill="#d7c8ad" /><rect width="1000" height="650" fill="url(#atlas-grain)" /><path d="M0 145 Q180 90 320 115 T650 105 T1000 55" fill="none" stroke="#aaa185" strokeWidth="60" opacity=".45" /><path d="M0 160 Q230 135 350 185 T1000 110" fill="none" stroke="#e6dcc9" strokeWidth="3" /><path d="M50 540 Q250 490 370 530 T700 500 T1000 555" fill="none" stroke="#f2ecdd" strokeWidth="24" /><path d="M130 480 Q300 370 455 455 T820 360" fill="none" stroke="#f2ecdd" strokeWidth="18" /><rect x="260" y="150" width="180" height="145" rx="8" fill="#aa8c69" transform="rotate(-7 350 220)" /><rect x="485" y="115" width="175" height="165" rx="84" fill="#bca17b" /><rect x="675" y="390" width="155" height="125" rx="10" fill="#aa8c69" transform="rotate(9 750 450)" /><rect x="370" y="370" width="150" height="100" rx="7" fill="#b79d79" /><path d="M158 385 Q240 320 330 340" fill="none" stroke="#79806a" strokeWidth="10" strokeLinecap="round" /><ellipse cx="610" cy="460" rx="95" ry="35" fill="#9ca99b" /><g fill="#697458" opacity=".8"><circle cx="126" cy="252" r="21"/><circle cx="212" cy="250" r="16"/><circle cx="741" cy="215" r="18"/><circle cx="875" cy="248" r="25"/><circle cx="312" cy="590" r="18"/></g></svg>{places.map((item, index) => <button key={item.id} type="button" className={`atlas-pin${active === index ? " active" : ""}`} style={{ left: `${item.x}%`, top: `${item.y}%` }} aria-label={`Explore ${item.name}`} aria-pressed={active === index} onClick={() => setActive(index)}>{String(index + 1).padStart(2, "0")}</button>)}<span className="atlas-north">N ↑</span><span className="atlas-caption">Illustrative property plan · Not a surveyed map</span></div><div className="atlas-info"><p className="eyebrow">Select a place / {String(active + 1).padStart(2, "0")}</p><h3>{place.name}</h3><p>{place.description}</p><Link href={place.href} className="text-link">{place.action} <span aria-hidden="true">↗</span></Link><div className="atlas-list" aria-label="Property locations">{places.map((item, index) => <button key={item.id} type="button" aria-pressed={active === index} onClick={() => setActive(index)}><span>{String(index + 1).padStart(2, "0")}</span>{item.name}</button>)}</div></div></div>;
+}
